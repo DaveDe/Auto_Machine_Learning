@@ -1,0 +1,42 @@
+ML_library.py:
+
+python3 ML_library.py
+
+Input File Format:
+
+1st line is file name
+2nd line is labels of categorical features, seperated by a comma (leave blank if there are no categorical features)
+
+Example input file:
+housing.csv
+X1,X5,X6
+
+Dataset Format:
+
+-The dataset should be a csv file. If seperated by whitespace, use convertToCSV.py
+-There should be a label row, with each feature labeled X1,X2, ... , XN and the prediction as Y
+
+Examples of proper dataset format:
+
+X1,X2,X3,Y
+1,"a",4,0
+7,"q",8,3
+...
+
+X1,Y,X2,X3
+12,143,1,"aq"
+3,133,5,"p"
+...
+
+Assumptions:
+  1. performing regression
+  2. input file and dataset has correct format
+  3. Cant have different data types in the same column
+  4. Cant handle missing values
+
+
+convertToCSV.py
+
+python3 convertToCSV.py <filename> <indicies of unwanted columns, seperated by space>
+
+If all columns are needed, then dont enter any indicies
