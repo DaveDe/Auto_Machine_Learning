@@ -1,42 +1,41 @@
-ML_library.py:
+How to run:
 
 python3 ML_library.py
 
 Input File Format:
 
 1st line is file name
-2nd line is labels of categorical features, seperated by a comma (leave blank if there are no categorical features)
+2nd line is indicies of categorical features, seperated by a comma (write "None" if there are no categorical features)
+3rd line is a indicies of columns you want removed (write "None" if you don't want any removed)
+4th line is a character or String that is in place of missing values (this will be replaced by the columns median.
+    Leave blank if all values are filled, "" if the values are blank)
+lines 5 and after are for algorithm selection
 
 Example input file:
-housing.csv
-X1,X5,X6
+
+dataset filename (must be .csv): output.csv
+nominal features: X0,X1,X2,X3,X4,X5,X6,X7
+remove column indicies (starting at 0): 0,4
+missing character string: ?
+linear regression (Y/N): N
+polynomial regression (Y/N): N
+ANN (Y/N): Y
+ElasticNet (Y/N): Y
+Random Forest (Y/N): Y
+
 
 Dataset Format:
 
--The dataset should be a csv file. If seperated by whitespace, use convertToCSV.py
--There should be a label row, with each feature labeled X1,X2, ... , XN and the prediction as Y
+-The first row must label all the columns, and Y must be one of the labels
 
 Examples of proper dataset format:
 
-X1,X2,X3,Y
+X0,X1,X2,Y
 1,"a",4,0
 7,"q",8,3
 ...
 
-X1,Y,X2,X3
-12,143,1,"aq"
-3,133,5,"p"
+Volume,Y,Temperature
+12,143,1
+3,133,5
 ...
-
-Assumptions:
-  1. performing regression
-  2. input file and dataset has correct format
-  3. Cant have different data types in the same column
-  4. Cant handle missing values
-
-
-convertToCSV.py
-
-python3 convertToCSV.py <filename> <indicies of unwanted columns, seperated by space>
-
-If all columns are needed, then dont enter any indicies

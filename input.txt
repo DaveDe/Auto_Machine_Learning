@@ -1,1 +1,9 @@
-output.csv
+dataset filename (must be .csv): train.csv
+nominal features: 2,3,4,5,6,7,8,9
+remove column indicies (starting at 0): 0
+missing character string:
+linear regression (Y/N): N
+polynomial regression (Y/N): N
+ANN (Y/N): Y
+ElasticNet (Y/N): Y
+Random Forest (Y/N): Y
