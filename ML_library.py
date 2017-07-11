@@ -14,10 +14,15 @@ import handleInput as hi
 with open('input.txt', 'r') as f:
     chosenAlgorithms, nominal_features_labels, data = hi.returnInputFileInfo(f)
 
-featureLabels = [x for x in data[0,:] if x != "Y"]
-data = pd.DataFrame(data)
-X = data[featureLabels]
-Y = data['Y']
+all_indicies = [x for x in range(0,len(data[0,:]))]
+featureIndicies = [i for i,j in enumerate(data[0,:]) if j != "Y"]
+Y_index = [x for x in all_indicies if x not in featureIndicies]
+
+X = data[:,featureIndicies]
+Y = data[:,Y_index[0]]
+
+X = pd.DataFrame(data=X[1:,:], columns=X[0,:])
+Y = pd.DataFrame(Y[1:])
 
 #convert nominal features into dummy matricies
 if(len(nominal_features_labels) > 0):
@@ -26,6 +31,11 @@ if(len(nominal_features_labels) > 0):
         X = pd.concat([X,dummy_matrix], axis=1)
     X.drop(nominal_features_labels, axis=1, inplace = True)
 
+perfLinearRegression = chosenAlgorithms[0]
+perfPolynomialRegression = chosenAlgorithms[1]
+perfANN = chosenAlgorithms[2]
+perfElasticNet = chosenAlgorithms[3]
+perfRandomForest = chosenAlgorithms[4]
 
 ##################### Begin Feature Selection #####################
 
