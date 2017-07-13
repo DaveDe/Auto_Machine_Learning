@@ -4,12 +4,13 @@ python3 ML_library.py
 
 Input File Format:
 
-1st line is file name
-2nd line is indicies of categorical features, seperated by a comma (write "None" if there are no categorical features)
-3rd line is a indicies of columns you want removed (write "None" if you don't want any removed)
-4th line is a character or String that is in place of missing values (this will be replaced by the columns median.
+1st line is training file name
+2nd line is test file name (should be same format as training file)
+3rd line is indicies of categorical features, seperated by a comma (write "None" if there are no categorical features)
+4th line is a indicies of columns you want removed (write "None" if you don't want any removed)
+5th line is a character or String that is in place of missing values (this will be replaced by the columns median.
     Leave blank if all values are filled, "" if the values are blank)
-lines 5 and after are for algorithm selection
+lines 6 and after are for algorithm selection
 
 Example input file:
 

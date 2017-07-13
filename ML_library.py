@@ -10,10 +10,10 @@ import handleInput as hi
 
 ################### Read data and convert nominal features #################
 
-
 with open('input.txt', 'r') as f:
-    chosenAlgorithms, nominal_features_labels, data = hi.returnInputFileInfo(f)
+    chosenAlgorithms, nominal_features_labels, data, testData = hi.returnInputFileInfo(f)
 
+print(testData)
 all_indicies = [x for x in range(0,len(data[0,:]))]
 featureIndicies = [i for i,j in enumerate(data[0,:]) if j != "Y"]
 Y_index = [x for x in all_indicies if x not in featureIndicies]
@@ -37,13 +37,25 @@ perfANN = chosenAlgorithms[2]
 perfElasticNet = chosenAlgorithms[3]
 perfRandomForest = chosenAlgorithms[4]
 
-##################### Begin Feature Selection #####################
+##################### Feature Selection #####################
 
 
 
 ################## Split data into train and test ###################
 
 X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.33)
+
+
+################# Drop features with high covariate drift ############
+#only if a seperate test file is given
+
+#combine subsets of train and test data into one dataset,
+#add column which identifies which set it came from.
+
+#go through each feature, and if it can be easily predicted from that feature
+#whether each row belongs to training or test (it has a high ROC), then you
+#know that feature has significant covariate drift.
+
 
 ################### Begin ML Regression Algorithms ###################
 
