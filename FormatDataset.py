@@ -1,7 +1,3 @@
-#converts whitespace seperated files to CSV files, removes unwanted columns,
-#relabels labels, fills missing values
-#BUG: wont work on non csv files that have a comma in its first row
-
 import sys
 import csv
 import shlex
@@ -158,8 +154,8 @@ def convertNominalToDummy(trainingData,testData,nominal_features_labels):
 
     return X_train,X_test,Y_train,Y_test
 
-#write to output.csv
-def writeReformattedCSV(data):
-    with open('output.csv', 'w', newline='') as f:
+def writeCSV(data, filename):
+    with open(filename, 'w', newline='') as f:
         writer = csv.writer(f)
-        writer.writerows(data)
+        for row in data:
+            writer.writerow([row])

@@ -22,10 +22,15 @@ def returnInputFileInfo(f):
         testData = np.array(testData)
         testData = fd.relableColumns(testData)
 
-    #get nominal feature indicies
+    outputPredictions = True
     line3 = f.readline().split(":")
-    nominal_features_indicies = line3[-1].strip()
-    if(nominal_features_indicies != "None"):
+    if(line3[-1].strip() == "N" or line3[-1].strip() == "n"):
+        outputPredictions = False
+
+    #get nominal feature indicies
+    line4 = f.readline().split(":")
+    nominal_features_indicies = line4[-1].strip()
+    if(nominal_features_indicies != ""):
         nominal_features_indicies= nominal_features_indicies.split(",")
         nominal_features_indicies[-1] = nominal_features_indicies[-1].replace("\n","")
 
@@ -33,9 +38,9 @@ def returnInputFileInfo(f):
     nominal_features_labels = [trainData[0,int(x)] for x in nominal_features_indicies]
 
     #get delete columns indicies
-    line4 = f.readline().split(":")
-    removeColumnIndicies = line4[-1].strip()
-    if(removeColumnIndicies != "None"):
+    line5 = f.readline().split(":")
+    removeColumnIndicies = line5[-1].strip()
+    if(removeColumnIndicies != ""):
         removeColumnIndicies = removeColumnIndicies.split(",")
         removeColumnIndicies[-1] = removeColumnIndicies[-1].replace("\n","")
 
@@ -45,30 +50,35 @@ def returnInputFileInfo(f):
         testData = fd.removeColumns(testData, removeColumnIndicies)
 
     #fill missing values
-    line5 = f.readline().split(":")
-    if(len(line5) > 1):
-        missingValueString = line5[-1].strip()
+    line6 = f.readline().split(":")
+    if(len(line6) > 1):
+        missingValueString = line6[-1].strip()
         trainData = fd.fillMissingValues(trainData,missingValueString)
         if(testDataFile):
             testData = fd.fillMissingValues(testData,missingValueString)
 
+    #identify and drop columns with high covariate shift?
+    perfCovariateShift = True
+    line7 = f.readline().split(":")
+    if(line7[-1].strip() == "N" or line7[-1].strip() == "n"):
+        perfCovariateShift = False
 
     #fill chosenAlgorithms boolean list
     chosenAlgorithms = [True,True,True,True,True]
-    line6 = f.readline().split(":")
-    if(line6[-1].strip() == "N" or line6[-1].strip() == "n"):
-        chosenAlgorithms[0] = False
-    line7 = f.readline().split(":")
-    if(line7[-1].strip() == "N" or line7[-1].strip() == "n"):
-        chosenAlgorithms[1] = False
     line8 = f.readline().split(":")
     if(line8[-1].strip() == "N" or line8[-1].strip() == "n"):
-        chosenAlgorithms[2] = False
+        chosenAlgorithms[0] = False
     line9 = f.readline().split(":")
     if(line9[-1].strip() == "N" or line9[-1].strip() == "n"):
-        chosenAlgorithms[3] = False
+        chosenAlgorithms[1] = False
     line10 = f.readline().split(":")
     if(line10[-1].strip() == "N" or line10[-1].strip() == "n"):
+        chosenAlgorithms[2] = False
+    line11 = f.readline().split(":")
+    if(line11[-1].strip() == "N" or line11[-1].strip() == "n"):
+        chosenAlgorithms[3] = False
+    line12 = f.readline().split(":")
+    if(line12[-1].strip() == "N" or line12[-1].strip() == "n"):
         chosenAlgorithms[4] = False
 
-    return chosenAlgorithms,nominal_features_labels,trainData,testData
+    return chosenAlgorithms,perfCovariateShift,nominal_features_labels,trainData,testData,outputPredictions
