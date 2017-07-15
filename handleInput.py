@@ -5,6 +5,7 @@ import FormatDataset as fd
 def returnInputFileInfo(f):
 
     testDataFile = False
+    testData = []
 
     #get datasets, convert to csv
     line1 = f.readline().split(":")
@@ -14,7 +15,7 @@ def returnInputFileInfo(f):
     trainData = fd.relableColumns(trainData)
 
     line2 = f.readline().split(":")
-    if(len(line2) > 1):
+    if(line2[-1].strip().replace("\n","") != ""):
         testDataFile = True
         testDataset = line2[-1].strip().replace("\n","")
         testData = fd.convertToCSV(testDataset)
@@ -29,7 +30,7 @@ def returnInputFileInfo(f):
         nominal_features_indicies[-1] = nominal_features_indicies[-1].replace("\n","")
 
     #map nominal feature indicies to new lables
-    nominal_features_labels = [data[0,int(x)] for x in nominal_features_indicies]
+    nominal_features_labels = [trainData[0,int(x)] for x in nominal_features_indicies]
 
     #get delete columns indicies
     line4 = f.readline().split(":")
@@ -40,7 +41,7 @@ def returnInputFileInfo(f):
 
     #delete unwanted columns
     trainData = fd.removeColumns(trainData,removeColumnIndicies)
-    if(testDataFile):   
+    if(testDataFile):
         testData = fd.removeColumns(testData, removeColumnIndicies)
 
     #fill missing values
@@ -70,4 +71,4 @@ def returnInputFileInfo(f):
     if(line10[-1].strip() == "N" or line10[-1].strip() == "n"):
         chosenAlgorithms[4] = False
 
-    return chosenAlgorithms,nominal_features_labels,trainData, testData
+    return chosenAlgorithms,nominal_features_labels,trainData,testData

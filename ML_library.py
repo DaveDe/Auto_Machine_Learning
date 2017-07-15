@@ -1,35 +1,24 @@
+#output prediction to file option
+#add boosting algorithms
+
 import pandas as pd
-from sklearn.model_selection import train_test_split
+import numpy as np
+from sklearn.model_selection import cross_val_score
 from sklearn.linear_model import LinearRegression
 from sklearn.neural_network import MLPRegressor
 from sklearn.preprocessing import PolynomialFeatures
 from sklearn.linear_model import ElasticNetCV
 from sklearn.ensemble import RandomForestRegressor
+from sklearn.ensemble import RandomForestClassifier
 import getModelPrediction as gmp
 import handleInput as hi
+import FormatDataset as fd
 
-################### Read data and convert nominal features #################
 
 with open('input.txt', 'r') as f:
-    chosenAlgorithms, nominal_features_labels, data, testData = hi.returnInputFileInfo(f)
+    chosenAlgorithms, nominal_features_labels, trainData, testData = hi.returnInputFileInfo(f)
 
-print(testData)
-all_indicies = [x for x in range(0,len(data[0,:]))]
-featureIndicies = [i for i,j in enumerate(data[0,:]) if j != "Y"]
-Y_index = [x for x in all_indicies if x not in featureIndicies]
-
-X = data[:,featureIndicies]
-Y = data[:,Y_index[0]]
-
-X = pd.DataFrame(data=X[1:,:], columns=X[0,:])
-Y = pd.DataFrame(Y[1:])
-
-#convert nominal features into dummy matricies
-if(len(nominal_features_labels) > 0):
-    for f in nominal_features_labels:
-        dummy_matrix = pd.get_dummies(X[f])
-        X = pd.concat([X,dummy_matrix], axis=1)
-    X.drop(nominal_features_labels, axis=1, inplace = True)
+X_train,X_test,Y_train,Y_test = fd.convertNominalToDummy(trainData,testData,nominal_features_labels)
 
 perfLinearRegression = chosenAlgorithms[0]
 perfPolynomialRegression = chosenAlgorithms[1]
@@ -39,15 +28,12 @@ perfRandomForest = chosenAlgorithms[4]
 
 ##################### Feature Selection #####################
 
-
-
-################## Split data into train and test ###################
-
-X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.33)
+#transform X_train and X_test
 
 
 ################# Drop features with high covariate drift ############
-#only if a seperate test file is given
+
+print("Checking columns with high covariate drift...")
 
 #combine subsets of train and test data into one dataset,
 #add column which identifies which set it came from.
@@ -56,6 +42,37 @@ X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.33)
 #whether each row belongs to training or test (it has a high ROC), then you
 #know that feature has significant covariate drift.
 
+X_train['origin'] = 0
+X_test['origin'] = 1
+
+#assume test data is about 30% the size of training
+X_train_sample = X_train.sample(frac = 0.33)
+X_test_sample = X_test.sample(frac = 0.33)
+
+X_train.drop('origin', axis=1, inplace = True)
+X_test.drop('origin', axis=1, inplace = True)
+
+## combining random samples
+combined = X_train_sample.append(X_test_sample)
+y_combined = combined['origin']
+combined.drop('origin',axis=1,inplace=True)
+
+## modelling
+model = RandomForestClassifier(n_estimators = 50, max_depth = 5,min_samples_leaf = 5)
+drop_list = []
+for i in combined.columns:
+    #score is array of scores from both runs (cv = 2)
+    score = cross_val_score(model,pd.DataFrame(combined[i]),y_combined,cv=2,scoring='roc_auc')
+    if (np.mean(score) > 0.8):
+        drop_list.append(i)
+
+X_train.drop(drop_list, axis=1, inplace = True)
+X_test.drop(drop_list, axis=1, inplace = True)
+
+if(len(drop_list) > 0):
+    print("Dropping columns with high drift:",drop_list)
+else:
+    print("No columns found with high drift")
 
 ################### Begin ML Regression Algorithms ###################
 

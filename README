@@ -5,7 +5,7 @@ python3 ML_library.py
 Input File Format:
 
 1st line is training file name
-2nd line is test file name (should be same format as training file)
+2nd line is test file name (should be same format as training file (Y isnt required). Leave blank if you dont have a test file)
 3rd line is indicies of categorical features, seperated by a comma (write "None" if there are no categorical features)
 4th line is a indicies of columns you want removed (write "None" if you don't want any removed)
 5th line is a character or String that is in place of missing values (this will be replaced by the columns median.
@@ -14,10 +14,11 @@ lines 6 and after are for algorithm selection
 
 Example input file:
 
-dataset filename (must be .csv): output.csv
-nominal features: X0,X1,X2,X3,X4,X5,X6,X7
-remove column indicies (starting at 0): 0,4
-missing character string: ?
+Training filename: train.csv
+Test filename:
+nominal features: 2,3,4,5,6,7,8,9
+remove column indicies (starting at 0): 0
+missing character string:
 linear regression (Y/N): N
 polynomial regression (Y/N): N
 ANN (Y/N): Y
@@ -27,7 +28,8 @@ Random Forest (Y/N): Y
 
 Dataset Format:
 
--The first row must label all the columns, and Y must be one of the labels
+- The first row must label all the columns, and Y must be one of the labels
+- Test file should be same format as training file, except Y isnt needed
 
 Examples of proper dataset format:
 
