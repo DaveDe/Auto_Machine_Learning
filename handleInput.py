@@ -64,7 +64,7 @@ def returnInputFileInfo(f):
         perfCovariateShift = False
 
     #fill chosenAlgorithms boolean list
-    chosenAlgorithms = [True,True,True,True,True]
+    chosenAlgorithms = [True,True,True,True,True,True]
     line8 = f.readline().split(":")
     if(line8[-1].strip() == "N" or line8[-1].strip() == "n"):
         chosenAlgorithms[0] = False
@@ -80,5 +80,8 @@ def returnInputFileInfo(f):
     line12 = f.readline().split(":")
     if(line12[-1].strip() == "N" or line12[-1].strip() == "n"):
         chosenAlgorithms[4] = False
+    line13 = f.readline().split(":")
+    if(line13[-1].strip() == "N" or line13[-1].strip() == "n"):
+        chosenAlgorithms[5] = False
 
     return chosenAlgorithms,perfCovariateShift,nominal_features_labels,trainData,testData,outputPredictions

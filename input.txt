@@ -7,6 +7,7 @@ missing character string:
 drop columns with high covariate shift (Y/N): N
 linear regression (Y/N): N
 polynomial regression (Y/N): N
-ANN (Y/N): Y
-ElasticNet (Y/N): Y
-Random Forest (Y/N): Y
+ANN (Y/N): N
+Elastic Net (Y/N): N
+Random Forest (Y/N): N
+Gradient Boosting Machine (Y/N): Y

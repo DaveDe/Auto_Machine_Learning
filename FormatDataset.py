@@ -81,7 +81,7 @@ def addBlankColumns(a,b):
 
     #ensure a and b have same column names in same order
     b.columns = a.columns
-    
+
     return a,b
 
 def noTestDataFile(X,Y,nominal_features_labels):
@@ -99,7 +99,7 @@ def noTestDataFile(X,Y,nominal_features_labels):
         newCols.append("X"+str(i))
     X.columns = newCols
 
-    return train_test_split(X, Y, test_size=0.33)
+    return train_test_split(X, Y, test_size=0.33,random_state=10)
 
 def convertNominalToDummy(trainingData,testData,nominal_features_labels):
 
