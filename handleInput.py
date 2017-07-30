@@ -51,7 +51,7 @@ def returnInputFileInfo(f):
 
     #fill missing values
     line6 = f.readline().split(":")
-    if(len(line6) > 1):
+    if(line6[-1] != "\n"):
         missingValueString = line6[-1].strip()
         trainData = fd.fillMissingValues(trainData,missingValueString)
         if(testDataFile):
@@ -63,25 +63,32 @@ def returnInputFileInfo(f):
     if(line7[-1].strip() == "N" or line7[-1].strip() == "n"):
         perfCovariateShift = False
 
-    #fill chosenAlgorithms boolean list
-    chosenAlgorithms = [True,True,True,True,True,True]
+    #Reduce data with PCA?
     line8 = f.readline().split(":")
-    if(line8[-1].strip() == "N" or line8[-1].strip() == "n"):
-        chosenAlgorithms[0] = False
+    PCANum = int(line8[-1].strip())
+
+    #fill chosenAlgorithms boolean list
+    chosenAlgorithms = [True,True,True,True,True,True,True]
     line9 = f.readline().split(":")
     if(line9[-1].strip() == "N" or line9[-1].strip() == "n"):
-        chosenAlgorithms[1] = False
+        chosenAlgorithms[0] = False
     line10 = f.readline().split(":")
     if(line10[-1].strip() == "N" or line10[-1].strip() == "n"):
-        chosenAlgorithms[2] = False
+        chosenAlgorithms[1] = False
     line11 = f.readline().split(":")
     if(line11[-1].strip() == "N" or line11[-1].strip() == "n"):
-        chosenAlgorithms[3] = False
+        chosenAlgorithms[2] = False
     line12 = f.readline().split(":")
     if(line12[-1].strip() == "N" or line12[-1].strip() == "n"):
-        chosenAlgorithms[4] = False
+        chosenAlgorithms[3] = False
     line13 = f.readline().split(":")
     if(line13[-1].strip() == "N" or line13[-1].strip() == "n"):
+        chosenAlgorithms[4] = False
+    line14 = f.readline().split(":")
+    if(line14[-1].strip() == "N" or line14[-1].strip() == "n"):
         chosenAlgorithms[5] = False
+    line15 = f.readline().split(":")
+    if(line15[-1].strip() == "N" or line15[-1].strip() == "n"):
+        chosenAlgorithms[6] = False
 
-    return chosenAlgorithms,perfCovariateShift,nominal_features_labels,trainData,testData,outputPredictions
+    return chosenAlgorithms,PCANum,perfCovariateShift,nominal_features_labels,trainData,testData,outputPredictions

@@ -84,8 +84,36 @@ def addBlankColumns(a,b):
 
     return a,b
 
+def mergeCategory(feature,category):
+	for index,item in enumerate(feature):
+		if(item == category):
+			feature[index] = 'new'
+	return feature
+
+def getFrequencyOfCategoryInFeature(category,feature):
+	totalElements = 0
+	matchingElements = 0
+	for item in feature:
+		if(item==category):
+			matchingElements += 1
+		totalElements += 1
+	frequency = ((matchingElements/totalElements)*100)
+	return frequency
+
+#all nominal values that have under 5% frequency are merged to a new common nominal value 'new'
+def removeCategories(feature):
+    valueSet = set(list(feature))
+    valueList = list(valueSet)
+    for category in valueList:
+        frequency = getFrequencyOfCategoryInFeature(category,feature)
+        if(frequency < 5):
+            feature = mergeCategory(feature,category)
+    return feature
+
 def noTestDataFile(X,Y,nominal_features_labels):
 
+    for feature in nominal_features_labels:
+        X[feature] = removeCategories(X[feature])
     #convert nominal to dummy
     if(len(nominal_features_labels) > 0):
         for i in nominal_features_labels:
@@ -131,6 +159,11 @@ def convertNominalToDummy(trainingData,testData,nominal_features_labels):
 
     X_test = pd.DataFrame(data=X_test[1:,:], columns=X_test[0,:])
     Y_test = pd.DataFrame(Y_test[1:])
+
+    #remove low frequency categories from nominal features
+    for feature in nominal_features_labels:
+        X_train[feature] = removeCategories(X_train[feature])
+        X_test[feature] = removeCategories(X_test[feature])
 
     #convert nominal features into dummy matricies
     #make sure when training set or test set gets an extra column, a blank one is addded for the other

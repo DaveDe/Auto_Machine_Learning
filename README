@@ -12,22 +12,26 @@ Input File Format:
 6th line is a character or String that is in place of missing values (this will be replaced by the columns median.
     Leave blank if all values are filled, "" if the values are blank)
 7th line asks whether you want to drop features that have high covariate drift
-lines 8 and after are for algorithm selection
+8th line takes the number of dimensions the data should be reduced to (via pca). Say 0 if you dont want PCA being run.
+lines 9 and after are for algorithm selection
 
 Example input file:
 
 Training filename: train.csv
-Test filename: test.csv
-Output predictions (Y/N): Y
+Test filename:
+Output predictions (Y/N): N
 nominal features: 2,3,4,5,6,7,8,9
 remove column indicies (starting at 0): 0
 missing character string:
 drop columns with high covariate shift (Y/N): N
-linear regression (Y/N): N
+PCA (enter number of dimensions): 100
+linear regression (Y/N): Y
 polynomial regression (Y/N): N
 ANN (Y/N): Y
-ElasticNet (Y/N): Y
+Elastic Net (Y/N): Y
 Random Forest (Y/N): Y
+Gradient Boosting Machine (Y/N): Y
+XGBoost (Y/N): N
 
 
 Dataset Format:
