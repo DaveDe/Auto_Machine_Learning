@@ -1,15 +1,15 @@
-Training filename: train.csv
+Training filename: data.csv
 Test filename:
 Output predictions (Y/N): N
-nominal features: 2,3,4,5,6,7,8,9
-remove column indicies (starting at 0): 0
+nominal features:
+remove column indicies (starting at 0):
 missing character string:
 drop columns with high covariate shift (Y/N): N
 PCA (enter number of dimensions): 0
-linear regression (Y/N): N
-polynomial regression (Y/N): N
-ANN (Y/N): N
-Elastic Net (Y/N): N
-Random Forest (Y/N): N
+linear regression (Y/N): Y
+polynomial regression (Y/N): Y
+ANN (Y/N): Y
+Elastic Net (Y/N): Y
+Random Forest (Y/N): Y
 Gradient Boosting Machine (Y/N): Y
-XGBoost (Y/N): Y
+XGBoost (Y/N): N

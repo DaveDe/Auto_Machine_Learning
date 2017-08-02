@@ -1,6 +1,6 @@
 from sklearn.model_selection import GridSearchCV
-import xgboost as xgb
-from xgboost.sklearn import XGBRegressor
+#import xgboost as xgb
+#from xgboost.sklearn import XGBRegressor
 
 def getTunedXGBoostModel(X_train,Y_train,X_test,Y_test):
     #tune number of estimators (decision trees)
@@ -18,7 +18,7 @@ def getTunedXGBoostModel(X_train,Y_train,X_test,Y_test):
                                         param_grid = param_test, n_jobs=4, iid=False, cv=5)
     gsearch.fit(X_train,Y_train.values.ravel())
     min_child_weight = gsearch.best_params_['min_child_weight']
-    
+
     #tune max_depth
     param_test = {'max_depth':range(3,12,1)}
 
@@ -105,8 +105,8 @@ def getTunedXGBoostModel(X_train,Y_train,X_test,Y_test):
 
 
     #proportionally decrease learning rate and increase # of estimators. Pick th bst combo
-    model = XGBRegressor(learning_rate=0.01, 
-                        n_estimators=n_estimators*10, 
+    model = XGBRegressor(learning_rate=0.01,
+                        n_estimators=n_estimators*10,
                         min_child_weight=min_child_weight,
                         max_depth=max_depth,
                         gamma=gamma,
@@ -118,8 +118,8 @@ def getTunedXGBoostModel(X_train,Y_train,X_test,Y_test):
     model.fit(X_train,Y_train.values.ravel())
     score = model.score(X_test,Y_test)
 
-    model2 = XGBRegressor(learning_rate=0.05, 
-                        n_estimators=n_estimators*2, 
+    model2 = XGBRegressor(learning_rate=0.05,
+                        n_estimators=n_estimators*2,
                         min_child_weight=min_child_weight,
                         max_depth=max_depth,
                         gamma=gamma,
@@ -135,8 +135,8 @@ def getTunedXGBoostModel(X_train,Y_train,X_test,Y_test):
         model = model2
 
 
-    model3 = XGBRegressor(learning_rate=0.1, 
-                        n_estimators=n_estimators, 
+    model3 = XGBRegressor(learning_rate=0.1,
+                        n_estimators=n_estimators,
                         min_child_weight=min_child_weight,
                         max_depth=max_depth,
                         gamma=gamma,
@@ -151,8 +151,8 @@ def getTunedXGBoostModel(X_train,Y_train,X_test,Y_test):
         score = score3
         model = model3
 
-    model4 = XGBRegressor(learning_rate=0.2, 
-                        n_estimators=int(n_estimators/2), 
+    model4 = XGBRegressor(learning_rate=0.2,
+                        n_estimators=int(n_estimators/2),
                         min_child_weight=min_child_weight,
                         max_depth=max_depth,
                         gamma=gamma,

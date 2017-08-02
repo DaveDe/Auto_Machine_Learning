@@ -1,5 +1,5 @@
-#add boosting algorithms
-#add feature selection methods (try pca and zca)
+#finish tuning for xgboost
+#add genetic algorithm
 
 import pandas as pd
 import numpy as np
@@ -13,13 +13,18 @@ from sklearn.linear_model import ElasticNetCV
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.ensemble import GradientBoostingRegressor
-import xgboost as xgb
-from xgboost.sklearn import XGBRegressor
+#import xgboost as xgb
+#from xgboost.sklearn import XGBRegressor
 import getModelPrediction as gmp
 import handleInput as hi
 import FormatDataset as fd
 import tuneGBMParams as tgbm
 import tuneXGBoostParams as txgb
+import tuneANNParams as tann
+import tuneRandomForestParams as trf
+import warnings
+
+
 
 with open('input.txt', 'r') as f:
     chosenAlgorithms,PCANum,perfCovariateShift, nominal_features_labels, trainData, testData, outputPredictions = hi.returnInputFileInfo(f)
@@ -114,26 +119,37 @@ if(perfPolynomialRegression):
 
 #ANN
 if(perfANN):
-    model = MLPRegressor(hidden_layer_sizes=(100,),solver="lbfgs",activation="relu",random_state=10)
-    r_squared,mse = gmp.getModelPredictions(model,X_train,Y_train,X_test,Y_test,outputPredictions,"ANN")
-    print("\nANN Regression R_squared:", r_squared)
-    print("ANN Regression MSE:", mse)
+    with warnings.catch_warnings():#suppress convergence warning. max_iter might be too low
+        warnings.simplefilter("ignore")
+        model = MLPRegressor(random_state=10)
+        r_squared,mse = gmp.getModelPredictions(model,X_train,Y_train,X_test,Y_test,outputPredictions,"ANN")
+        print("\nNot Tuned ANN Regression R_squared:", r_squared)
+        print("Not Tuned ANN Regression MSE:", mse)
+
+        tunedAnnModel = tann.getTunedANNModel(X_train,Y_train,X_test,Y_test)
+        r_squared,mse = gmp.getModelPredictions(tunedAnnModel,X_train,Y_train,X_test,Y_test,outputPredictions,"ANN")
+        print("\nTuned ANN Regression R_squared:", r_squared)
+        print("Tuned ANN Regression MSE:", mse)
 
 #Elastic Net
 if(perfElasticNet):
-    model = ElasticNetCV(l1_ratio=[.1, .5, .7, .9, .95, .99, .995, 1], eps=0.001, n_alphas=100, fit_intercept=True,
-                            normalize=True, precompute='auto', max_iter=2000, tol=0.0001, cv=5,
-                            copy_X=True, verbose=0, n_jobs=-1, positive=False, random_state=10, selection='cyclic')
+    model = ElasticNetCV(l1_ratio=[.1, .3, .5, .7, .9, .95, .99, .995, 1], random_state=10)
     r_squared,mse = gmp.getModelPredictions(model,X_train,Y_train,X_test,Y_test,outputPredictions,"Elastic_Net")
     print("\nElastic Net Regression R_squared:", r_squared)
     print("Elastic Net Regression MSE:", mse)
 
 #Random Forest
 if(perfRandomForest):
+
     model = RandomForestRegressor(random_state=10)
     r_squared,mse = gmp.getModelPredictions(model,X_train,Y_train,X_test,Y_test,outputPredictions,"Random_Forest")
-    print("\nRandom Forest Regression R_squared:", r_squared)
-    print("Random Forest Regression MSE:", mse)
+    print("\nNot Tuned Random Forest Regression R_squared:", r_squared)
+    print("Not Tuned Random Forest Regression MSE:", mse)
+
+    tunedRFModel = trf.getTunedRandomForestModel(X_train,Y_train,X_test,Y_test)
+    r_squared,mse = gmp.getModelPredictions(tunedRFModel,X_train,Y_train,X_test,Y_test,outputPredictions,"Random_Forest")
+    print("\nTuned Random Forest Regression R_squared:", r_squared)
+    print("Tuned Random Forest Regression MSE:", mse)
 
 #Gradient Boosting Machine
 if(perfGBM):
@@ -155,7 +171,7 @@ if(perfXGBoost):
 
     tunedXGBoostModel = txgb.getTunedXGBoostModel(X_train,Y_train,X_test,Y_test)
 
-    r_squared,mse = gmp.getModelPredictions(model,X_train,Y_train,X_test,Y_test,outputPredictions,"XGBoost")
+    r_squared,mse = gmp.getModelPredictions(tunedXGBoostModel,X_train,Y_train,X_test,Y_test,outputPredictions,"XGBoost")
     print("\nTuned XGBoost R_squared:", r_squared)
     print("Tuned XGBoost MSE:", mse)
 
