@@ -6,10 +6,11 @@ remove column indicies (starting at 0):
 missing character string:
 drop columns with high covariate shift (Y/N): N
 PCA (enter number of dimensions): 0
-linear regression (Y/N): Y
-polynomial regression (Y/N): Y
-ANN (Y/N): Y
-Elastic Net (Y/N): Y
-Random Forest (Y/N): Y
-Gradient Boosting Machine (Y/N): Y
-XGBoost (Y/N): N
+linear regression (Y/N): N
+polynomial regression (Y/N): N
+ANN (Y/N): N
+Elastic Net (Y/N): N
+Random Forest (Y/N): N
+Gradient Boosting Machine (Y/N): N
+XGBoost (Y/N): Y
+LightGBM (Y/N): Y

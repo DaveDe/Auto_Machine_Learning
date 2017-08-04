@@ -1,6 +1,3 @@
-#finish tuning for xgboost
-#add genetic algorithm
-
 import pandas as pd
 import numpy as np
 from sklearn.model_selection import cross_val_score
@@ -13,8 +10,10 @@ from sklearn.linear_model import ElasticNetCV
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.ensemble import GradientBoostingRegressor
-#import xgboost as xgb
-#from xgboost.sklearn import XGBRegressor
+import xgboost as xgb
+from xgboost.sklearn import XGBRegressor
+import lightgbm as lgb
+
 import getModelPrediction as gmp
 import handleInput as hi
 import FormatDataset as fd
@@ -42,6 +41,7 @@ perfElasticNet = chosenAlgorithms[3]
 perfRandomForest = chosenAlgorithms[4]
 perfGBM = chosenAlgorithms[5]
 perfXGBoost = chosenAlgorithms[6]
+perfLightGBM = chosenAlgorithms[7]
 
 ################# Drop features with high covariate drift ############
 if(perfCovariateShift):
@@ -179,3 +179,12 @@ if(perfXGBoost):
     r_squared,mse = gmp.getModelPredictions(model,X_train,Y_train,X_test,Y_test,outputPredictions,"XGBoost")
     print("\nNot Tuned XGBoost R_squared:", r_squared)
     print("Not Tuned XGBoost MSE:", mse)
+
+if(perfLightGBM):#not tuned, so probably bad accuracy
+    model = lgb.LGBMRegressor(objective='regression',
+                            num_leaves=31,
+                            learning_rate=0.05,
+                            n_estimators=20)
+    r_squared,mse = gmp.getModelPredictions(model,X_train,Y_train,X_test,Y_test,outputPredictions,"LightGBM")
+    print("\nLight GBM R_squared:", r_squared)
+    print("Light GBM MSE:", mse)

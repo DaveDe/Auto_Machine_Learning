@@ -1,6 +1,6 @@
 from sklearn.model_selection import GridSearchCV
-#import xgboost as xgb
-#from xgboost.sklearn import XGBRegressor
+import xgboost as xgb
+from xgboost.sklearn import XGBRegressor
 
 def getTunedXGBoostModel(X_train,Y_train,X_test,Y_test):
     #tune number of estimators (decision trees)

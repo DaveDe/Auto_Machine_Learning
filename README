@@ -1,3 +1,7 @@
+This is an automated machine learning application that inputs a dataset, performs preprocessing, and performs various algorithms,
+with parameter tuning. While building this I learned that better Auto ML librarys exist, so I suggest looking into TPOT, 
+Auto-sklearn, and ML BOX.
+
 How to run:
 
 python3 ML_library.py
@@ -32,7 +36,7 @@ Elastic Net (Y/N): Y
 Random Forest (Y/N): Y
 Gradient Boosting Machine (Y/N): Y
 XGBoost (Y/N): N
-
+LightGBM (Y/N): Y
 
 Dataset Format:
 

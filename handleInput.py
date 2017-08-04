@@ -68,7 +68,7 @@ def returnInputFileInfo(f):
     PCANum = int(line8[-1].strip())
 
     #fill chosenAlgorithms boolean list
-    chosenAlgorithms = [True,True,True,True,True,True,True]
+    chosenAlgorithms = [True,True,True,True,True,True,True,True]
     line9 = f.readline().split(":")
     if(line9[-1].strip() == "N" or line9[-1].strip() == "n"):
         chosenAlgorithms[0] = False
@@ -90,5 +90,8 @@ def returnInputFileInfo(f):
     line15 = f.readline().split(":")
     if(line15[-1].strip() == "N" or line15[-1].strip() == "n"):
         chosenAlgorithms[6] = False
+    line16 = f.readline().split(":")
+    if(line16[-1].strip() == "N" or line16[-1].strip() == "n"):
+        chosenAlgorithms[7] = False
 
     return chosenAlgorithms,PCANum,perfCovariateShift,nominal_features_labels,trainData,testData,outputPredictions
